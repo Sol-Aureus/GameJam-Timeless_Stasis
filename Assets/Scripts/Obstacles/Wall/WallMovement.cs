@@ -12,6 +12,11 @@ public class WallMovement : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform[] points;
     [SerializeField] private Transform wallTransform;
+    [SerializeField] private MeshRenderer[] wallMeshRenderers;
+    [SerializeField] private Material baseMaterial;
+    [SerializeField] private Material slowMaterial;
+    [SerializeField] private Material freezeMaterial;
+    [SerializeField] private Material pastMaterial;
 
     private float sinTime;
     private int i;
@@ -24,8 +29,19 @@ public class WallMovement : MonoBehaviour
     void Start()
     {
         ResetWallPosition();
-        PlayerDeath.OnPlayerRespawned += ResetWallPosition;
         ResetSpeed();
+    }
+
+    // Subscribe to the player respawn event
+    void OnEnable()
+    {
+        PlayerDeath.OnPlayerRespawned += ResetWallPosition;
+    }
+
+    // Unsubscribe from the player respawn event
+    void OnDisable()
+    {
+        PlayerDeath.OnPlayerRespawned -= ResetWallPosition;
     }
 
     // FixedUpdate is called at a fixed interval and is independent of frame rate
@@ -70,6 +86,15 @@ public class WallMovement : MonoBehaviour
     // Reset wall position to starting point
     public void ResetWallPosition()
     {
+        if (isFrozen)
+        {
+            for (int j = 0; j < wallMeshRenderers.Length; j++)
+            {
+                wallMeshRenderers[j].material = pastMaterial;
+            }
+            return;
+        }
+
         transform.position = points[startingPoint].position;
         i = startingPoint;
         sinTime = 0;
@@ -80,12 +105,20 @@ public class WallMovement : MonoBehaviour
     {
         currentMoveSpeed = moveSpeed * 0.5f;
         currentRotationSpeed = rotationSpeed * 0.5f;
+        for (int j = 0; j < wallMeshRenderers.Length; j++)
+        {
+            wallMeshRenderers[j].material = slowMaterial;
+        }
     }
 
     // Apply freezing effect to the saw
     public void SetFreeze()
     {
         isFrozen = true;
+        for (int j = 0; j < wallMeshRenderers.Length; j++)
+        {
+            wallMeshRenderers[j].material = freezeMaterial;
+        }
     }
 
     // Check if the saw is frozen
@@ -99,5 +132,9 @@ public class WallMovement : MonoBehaviour
     {
         currentMoveSpeed = moveSpeed;
         currentRotationSpeed = rotationSpeed;
+        for (int j = 0; j < wallMeshRenderers.Length; j++)
+        {
+            wallMeshRenderers[j].material = baseMaterial;
+        }
     }
 }

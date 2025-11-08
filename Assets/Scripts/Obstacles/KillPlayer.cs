@@ -5,6 +5,12 @@ public class KillPlayer : MonoBehaviour
 {
     [Header("Kill Player Settings")]
     [SerializeField] private float gracePeriod = 0.12f;
+    [SerializeField] private int mainLayer;
+
+    void Start()
+    {
+        gameObject.layer = mainLayer;
+    }
 
     private float killTimer = 0f;
 

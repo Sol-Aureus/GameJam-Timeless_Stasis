@@ -54,4 +54,11 @@ public class LaunchBlades : MonoBehaviour
     {
         return Vector3.Distance(transform.position, target.position) <= range;
     }
+
+    // Visualize the launch range in the editor
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
+    }
 }

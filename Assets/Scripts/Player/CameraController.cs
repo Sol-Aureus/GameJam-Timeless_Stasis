@@ -21,6 +21,8 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        PlayerDeath.OnPlayerRespawned += ResetLookDirection;
+
         lookAction = InputSystem.actions.FindAction("Look");
     }
 
@@ -39,5 +41,11 @@ public class CameraController : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
         orientation.rotation = Quaternion.Euler(0, rotationY, 0);
+    }
+
+    private void ResetLookDirection()
+    {
+        rotationY = 180f;
+        rotationX = 0f;
     }
 }

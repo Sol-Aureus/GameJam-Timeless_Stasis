@@ -25,6 +25,8 @@ public class ObjectSlow : MonoBehaviour
     // Check for objects within the slow radius
     private void CheckForObjects()
     {
+        objectsInRange.RemoveWhere(obj => obj == null);
+
         Collider[] hits = Physics.OverlapSphere(transform.position, outerRadius, freezeLayer);
         HashSet<GameObject> currentHits = new HashSet<GameObject>();
 
@@ -48,6 +50,7 @@ public class ObjectSlow : MonoBehaviour
 
         foreach (var obj in objectsInRange)
         {
+            if (obj == null) continue;
             if (!currentHits.Contains(obj))
             {
                 RestoreSpeed(obj);
@@ -112,5 +115,14 @@ public class ObjectSlow : MonoBehaviour
                 obj.GetComponentInParent<WallMovement>().ResetSpeed();
             }
         }
+    }
+
+    // Visualize the slow and freeze radii in the editor
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, outerRadius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, innerRadius);
     }
 }

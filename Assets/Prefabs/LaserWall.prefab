@@ -132,7 +132,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3436057589411520387}
   - component: {fileID: 8276687634819056503}
-  - component: {fileID: 259295249856590032}
   - component: {fileID: 8967360590782503856}
   m_Layer: 6
   m_Name: LaserWall
@@ -185,19 +184,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &259295249856590032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7509404490011716773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c10eaa28bb6542849ba5b942f95f8b71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KillPlayer
-  gracePeriod: 0.12
 --- !u!114 &8967360590782503856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,13 +197,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallMovement
   startingPoint: 0
-  moveSpeed: 0
-  acceptableDist: 0.6
+  moveSpeed: 10
+  acceptableDist: 1
   rotationSpeed: 300
-  points:
-  - {fileID: 0}
-  - {fileID: 0}
+  points: []
   wallTransform: {fileID: 6450318509987119909}
+  wallMeshRenderers:
+  - {fileID: 6909992809864877225}
+  - {fileID: 8887080523876962508}
+  baseMaterial: {fileID: 2100000, guid: 52a6d88807b3e864092d67244ae59492, type: 2}
+  slowMaterial: {fileID: 2100000, guid: 28cab44db16d76740961405b7ea1a9c7, type: 2}
+  freezeMaterial: {fileID: 2100000, guid: 98818489ddb331f4f8426497a5469402, type: 2}
+  pastMaterial: {fileID: 2100000, guid: 05994041a7cf0f44ebfb85dbb60dd7d2, type: 2}
 --- !u!1 &8080464135567232757
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,7 +308,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4083946794847924925}
   - component: {fileID: 3846367199984489620}
-  m_Layer: 6
+  - component: {fileID: 5855153241966545512}
+  m_Layer: 0
   m_Name: KillTrigger
   m_TagString: LaserWall
   m_Icon: {fileID: 0}
@@ -360,3 +352,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 6, z: 6}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5855153241966545512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8314345562264082114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10eaa28bb6542849ba5b942f95f8b71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillPlayer
+  gracePeriod: 0.06
+  mainLayer: 6
