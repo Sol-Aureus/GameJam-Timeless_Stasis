@@ -25,6 +25,11 @@ public class PlayerController: MonoBehaviour
     private Vector3 moveDirection;
     private Vector2 moveVector;
 
+    private float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
+    private float jumpBufferCounter;
+    private float jumpCooldownCounter;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,7 +44,19 @@ public class PlayerController: MonoBehaviour
     {
         Inputs();
         SpeedCap();
-        CheckIsGrounded();
+        if (CheckIsGrounded() && jumpCooldownCounter <= 0f)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        jumpBufferCounter -= Time.deltaTime;
+        jumpCooldownCounter -= Time.deltaTime;
+
+        Jump();
     }
 
     // FixedUpdate is called at a fixed interval and is independent of frame rate
@@ -53,7 +70,20 @@ public class PlayerController: MonoBehaviour
     // Handle jump input
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        jumpBufferCounter = coyoteTime;
+    }
+
+    // Execute jump if conditions are met
+    private void Jump()
+    {
+        if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f && jumpCooldownCounter <= 0f)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+            coyoteTimeCounter = 0f;
+            jumpBufferCounter = 0f;
+            jumpCooldownCounter = coyoteTime;
+        }
     }
 
     // Handle player inputs
@@ -88,7 +118,10 @@ public class PlayerController: MonoBehaviour
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x * airDrag, rb.linearVelocity.y, rb.linearVelocity.z * airDrag);
         }
-        if (rb.linearVelocity.magnitude < 0.1f)
+
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+
+        if (flatVel.magnitude <= 0.1f)
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         }

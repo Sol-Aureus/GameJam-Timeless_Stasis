@@ -4,17 +4,20 @@ public class WallMovement : MonoBehaviour
 {
 
     [Header("Wall Movement Settings")]
-    [SerializeField] private int startingPoint;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float acceptableDist;
+    [SerializeField] private int startingPoint = 0;
+    [SerializeField] private float moveSpeed = 20f;
+    [SerializeField] private float acceptableDist = 1f;
+    [SerializeField] private float rotationSpeed = 300f;
 
     [Header("References")]
     [SerializeField] private Transform[] points;
+    [SerializeField] private Transform wallTransform;
 
     private float sinTime;
     private int i;
 
     private float currentMoveSpeed;
+    private float currentRotationSpeed;
     private bool isFrozen = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -47,12 +50,21 @@ public class WallMovement : MonoBehaviour
                 i = 0;
             }
         }
+
+        transform.LookAt(points[i].position);
+
+        RotateWall();
     }
 
     // Sine wave function to smooth movement
     private float evaluate(float x)
     {
         return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) + 0.5f;
+    }
+
+    private void RotateWall()
+    {
+        wallTransform.Rotate(Vector3.right * currentRotationSpeed * Time.fixedDeltaTime);
     }
 
     // Reset wall position to starting point
@@ -67,12 +79,12 @@ public class WallMovement : MonoBehaviour
     public void SetSlow()
     {
         currentMoveSpeed = moveSpeed * 0.5f;
+        currentRotationSpeed = rotationSpeed * 0.5f;
     }
 
     // Apply freezing effect to the saw
     public void SetFreeze()
     {
-        currentMoveSpeed = 0f;
         isFrozen = true;
     }
 
@@ -86,5 +98,6 @@ public class WallMovement : MonoBehaviour
     public void ResetSpeed()
     {
         currentMoveSpeed = moveSpeed;
+        currentRotationSpeed = rotationSpeed;
     }
 }

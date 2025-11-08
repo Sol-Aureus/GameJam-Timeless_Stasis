@@ -49,8 +49,6 @@ public class SawMovement : MonoBehaviour
     // Apply freezing effect to the saw
     public void SetFreeze()
     {
-        currentRotationSpeed = 0f;
-        currentMoveSpeed = 0f;
         isFrozen = true;
     }
 
