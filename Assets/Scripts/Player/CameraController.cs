@@ -48,4 +48,10 @@ public class CameraController : MonoBehaviour
         rotationY = 180f;
         rotationX = 0f;
     }
+
+    public void ChangeSense(float newSens)
+    {
+        sensX = newSens;
+        sensY = newSens;
+    }
 }
